@@ -18,4 +18,29 @@ import "deps/phoenix_html/web/static/js/phoenix_html"
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
 
-// import socket from "./socket"
+import {Socket} from "deps/phoenix/web/static/js/phoenix"
+
+let socket = new Socket("/socket")
+socket.connect()
+let chan = socket.channel("rooms:lobby", {})
+chan.join().receive("ok", chan => {
+  console.log("Welcome to Phoenix Chat!")
+})
+
+let chatInput         = $("#chat-input")
+let messagesContainer = $("#messages")
+
+chatInput.on("keypress", event => {
+  if(event.keyCode === 13){
+    chan.push("new_msg", {body: chatInput.val()})
+    chatInput.val("")
+  }
+})
+
+chan.on("new_msg", payload => {
+  messagesContainer.append(`<br/>[${Date()}] ${payload.body}`)
+})
+
+chan.join().receive("ok", chan => {
+  console.log("Welcome to Phoenix Chat!")
+})

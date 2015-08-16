@@ -33,4 +33,8 @@
       </li>
     </ul>
   </div>
+
+  <h4>DonnyChat</h4>
+  <div id="messages"></div>
+  <input id="chat-input" type="text"></input>
 </div>
